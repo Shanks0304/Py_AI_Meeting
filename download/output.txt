@@ -1,0 +1,25 @@
+SPEAKER_00 (0.0, 10.0) I'm good, how are you? I'm doing great. Thank you for asking. Well, I believe that you're responding to get a lower interest rate than a credit card.
+
+SPEAKER_01 (10.0, 12.0) Is that correct?
+
+SPEAKER_00 (12.0, 13.0) Yes.
+
+SPEAKER_01 (13.0, 25.6) Okay, so now an audit took the rate to lower interest rate than a credit card, is that correct? Yes.
+
+SPEAKER_00 (28.5, 31.5) Okay, so now in order to raise the lower interest rate on a credit card for the bank verification purpose,
+
+SPEAKER_01 (31.5, 33.7) I want you to kindly grab your card in your hand
+
+SPEAKER_00 (33.7, 38.7) if you're applying for the expiration date on this card, like when a credit card is going to be expired.
+
+SPEAKER_01 (39.9, 42.9) On September of next year, 0922.
+
+SPEAKER_00 (44.2, 47.9) 0922, and do you share this card with someone else or you are the only
+
+SPEAKER_01 (47.9, 55.0) the primary card holder on this credit per account? I'm the primary card holder. Okay, so the next step
+
+SPEAKER_00 (55.0, 59.2) what I'm going to do I'm going to just simply verify this account for you and I'm going to let
+
+SPEAKER_01 (59.2, 77.0) you know the motion and blame statement of the credit card account like with your balance available loss payment in the most current interest rate that you've been from outside so now in front of the card you will see a long 16-digit number kindly verify me those numbers from the beginning so i can verify this
+
+SPEAKER_00 (77.0, 89.7) account yep it's four five
