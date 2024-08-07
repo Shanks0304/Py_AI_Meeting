@@ -1,9 +1,15 @@
 import time
 from pyannote.audio import Pipeline
+import torchaudio
 from transformers import pipeline
+from utils.faster_whisper_model import faster_whisper_test
 from utils.diarize import ASRDiarizationPipeline
 import os
-import torchaudio
+import librosa
+import torch
+import noisereduce as nr
+import soundfile as sf
+
 
 def get_audio_files(directory):
     project_dir =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -62,31 +68,61 @@ def format_as_transcription(raw_segments):
         ]
     )
 
-def speech_to_text():
+def speech_to_text(filepath: str):
     asr_pipeline = pipeline(
         "automatic-speech-recognition",
         model="openai/whisper-medium.en",
         chunk_length_s=30,
     )
     audio_file_list = get_audio_files('download')
+    print(audio_file_list[0])
+    print(type(audio_file_list[0]))
     text_result = asr_pipeline(
         audio_file_list[0],
         batch_size=8,
         return_timestamps=True,
     )["chunks"]
     print(text_result)
+    # for audio_file in audio_file_list:
+    #     faster_whisper_test(audio_file)
 
-def audio_convert_to_wav(audio_file):  
-    if audio_file.lower().endswith('.wav'):  
-        return audio_file  
-    else:  
-        # Load the audio file using torchaudio  
-        waveform, sample_rate = torchaudio.load(audio_file)  
+def transcribe_audio(filename):
+    audio_file_path = f"download\\{filename}"
+    y, sr = librosa.load(audio_file_path, sr=None)  # y is the audio time series, sr is the sample rate
 
-        # Set the path for the output WAV file  
-        wav_path = os.path.splitext(audio_file)[0] + ".wav"  
+    # Perform noise reduction
+    y_reduced = nr.reduce_noise(y=y, sr=sr)
 
-        # Save the waveform to a WAV file  
-        torchaudio.save(wav_path, waveform, sample_rate)  
+    ## Save the cleaned audio in WAV format  
+    cleaned_file_path = f"download/cleaned_temp.wav"  
+    sf.write(cleaned_file_path, y_reduced, sr)
+    project_dir =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    temp_file_path = os.path.join(project_dir, cleaned_file_path)
+    print(temp_file_path)
+    # audio_file= open(temp_file_path, "rb")
+    speaker_diarization(temp_file_path)
 
-        return wav_path  
+def speaker_diarization(filepath: str):
+    diarization_pipeline = Pipeline.from_pretrained(
+        "pyannote/speaker-diarization-3.1",
+    )
+    # audio_file_list = get_audio_files('download')
+    waveform, sample_rate = torchaudio.load(filepath)
+    result = diarization_pipeline({"waveform": waveform, "sample_rate": 16000})
+    print(result)
+
+# def audio_convert_to_wav(audio_file):  
+#     if audio_file.lower().endswith('.wav'):  
+#         return audio_file  
+#     else:  
+#         # Load the audio file using torchaudio  
+#         waveform, sample_rate = torchaudio.load(audio_file)  
+
+#         # Set the path for the output WAV file  
+#         wav_path = os.path.splitext(audio_file)[0] + ".wav"  
+
+#         # Save the waveform to a WAV file  
+#         torchaudio.save(wav_path, waveform, sample_rate)  
+
+#         return wav_path
+    
